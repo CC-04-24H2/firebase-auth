@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { auth } from "../firebase";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+	createUserWithEmailAndPassword,
+	GoogleAuthProvider,
+	signInWithPopup,
+	updateProfile,
+} from "firebase/auth";
 import SweetAlert from "./Alert";
 
 export default function Register() {
@@ -25,19 +30,20 @@ export default function Register() {
 				displayName: name,
 			});
 
+			console.log(user);
+			console.log(user.uid);
 			SweetAlert({
 				title: "Register Success",
 				icon: "success",
 				redirect: "/login",
 			});
-			console.log(user);
 		} catch (error) {
+			console.log(error);
 			SweetAlert({
 				title: "Register Failed",
 				icon: "error",
 				redirect: "/register",
 			});
-			console.log(error);
 		} finally {
 			setName("");
 			setEmail("");
@@ -45,10 +51,34 @@ export default function Register() {
 		}
 	};
 
+	const handleRegisterGoogle = async () => {
+		const provider = new GoogleAuthProvider();
+
+		try {
+			const userCredential = await signInWithPopup(auth, provider);
+
+			const user = userCredential.user;
+			console.log(user);
+			console.log(user.uid);
+			SweetAlert({
+				title: "Register Success",
+				icon: "success",
+				redirect: "/login",
+			});
+		} catch (error) {
+			console.log(error);
+			SweetAlert({
+				title: "Register Failed",
+				icon: "error",
+				redirect: "/register",
+			});
+		}
+	};
+
 	return (
 		<>
 			<h2 className="text-center mb-4">Register</h2>
-			<Form onSubmit={handleRegister}>
+			<Form onSubmit={handleRegister} className="mb-3">
 				<Form.Group className="mb-3" controlId="name">
 					<Form.Label>Name</Form.Label>
 					<Form.Control
@@ -86,6 +116,8 @@ export default function Register() {
 					Register
 				</Button>
 			</Form>
+			<p>or</p>
+			<Button onClick={handleRegisterGoogle}>Register with Google</Button>
 		</>
 	);
 }

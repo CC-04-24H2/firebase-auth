@@ -12,6 +12,10 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
+const auth = getAuth(app);
+auth.languageCode = 'id';
+// set auth language to device's default
+// auth.useDeviceLanguage();
 
+export { auth };
 export default app;
