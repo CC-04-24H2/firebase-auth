@@ -37,3 +37,7 @@ This project built with [Vite](https://vite.dev) + [React](https://react.dev) in
    # or
    npm run dev
    ```
+
+## References
+
+- [Firebase Authentication on Web](https://firebase.google.com/docs/auth/web/start)
