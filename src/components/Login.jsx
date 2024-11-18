@@ -1,16 +1,29 @@
 import {
 	GoogleAuthProvider,
+	onAuthStateChanged,
 	signInWithEmailAndPassword,
 	signInWithPopup,
 } from "firebase/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { auth } from "../firebase";
 import SweetAlert from "./Alert";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		onAuthStateChanged(auth, async (user) => {
+			if (user != null) {
+				navigate("/");
+				return;
+			}
+		});
+	});
 
 	const handleLogin = async (e) => {
 		e.preventDefault();

@@ -1,18 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { auth } from "../firebase";
 import {
 	createUserWithEmailAndPassword,
 	GoogleAuthProvider,
+	onAuthStateChanged,
 	signInWithPopup,
 	updateProfile,
 } from "firebase/auth";
 import SweetAlert from "./Alert";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		onAuthStateChanged(auth, async (user) => {
+			if (user != null) {
+				navigate("/");
+				return;
+			}
+		});
+	});
 
 	const handleRegister = async (e) => {
 		e.preventDefault();
